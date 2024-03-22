@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Учимся сложению</title>
+    <link rel="stylesheet" href="./modern-normalize.min.css">
+
+    <style>
+        body {
+            font-size: 40px;
+        }
+
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            /*width: ;*/
+        }
+        .wrapper {
+            display: grid;
+            grid-template-columns: repeat(8, 40px);
+            grid-column-gap: 10px;
+            grid-row-gap: 20px;
+            text-align: center;
+        }
+
+        .hleft {
+            grid-column: 1 / 5;
+            text-transform: uppercase;
+        }
+
+        .hright {
+            grid-column: 5 / 9;
+            text-transform: uppercase;
+        }
+
+        #left {
+            grid-column: 2 / 3;
+        }
+        #result {
+            grid-column-start: 6;
+            grid-column-end: 8;
+            grid-row-start: 3;
+            grid-row-end: 3;
+            text-align: center;
+
+        }
+
+        #check {
+            font-size: 20px;
+            grid-column-start: 3;
+            grid-column-end: 7;
+            border: none;
+            background-color: green;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        #success {
+            grid-column: 1 / 5;
+            color: green;
+            font-size: 80px;
+        }
+
+        #error {
+            grid-column: 5 / 9;
+            color: red;
+            font-size: 80px;
+        }
+
+
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        @keyframes spin1 { 100% { transform:rotate(360deg); } }
+
+    </style>
+    <script>
+    function getNumber() {
+      const minNumber = 0; // The minimum number you want
+      const maxNumber = 9; // The maximum number you want
+      return Math.floor(Math.random() * (maxNumber + 1) + minNumber); // Generates random number
+    }
+
+    function getValue(id) {
+      return parseInt(document.getElementById(id).innerHTML, 10);
+    }
+
+    function setValue(id, value) {
+      document.getElementById(id).innerHTML = value;
+    }
+
+
+    function generate() {
+      setValue('left', getNumber());
+      setValue('right', getNumber());
+      let input = document.getElementById('result');
+      input.value = null;
+      input.focus();
+    }
+
+    function check() {
+      const result = parseInt(document.getElementById('result').value, 10);
+
+      if(isNaN(result)) {
+        return;
+      }
+
+      const left = getValue('left');
+      const right = getValue('right');
+      if (right + left === result) {
+        setValue('success', getValue('success') + 1)
+        generate()
+      } else {
+        setValue('error', getValue('error') + 1)
+      }
+    }
+
+    function load() {
+      document.getElementById('result').addEventListener("keydown", (event) => {
+        if(event.code === 'Enter') {
+          check();
+        } else {
+
+        }
+      });
+      generate();
+    }
+    </script>
+</head>
+<body onload="load()">
+<div class="center">
+<div class="wrapper">
+    <div class="hleft">Верно</div>
+    <div class="hright">Ошибка</div>
+    <div id="success">0</div>
+    <div id="error">0</div>
+    <div id="left"></div>
+    <div>+</div>
+    <div id="right"></div>
+    <div>=</div>
+    <input id="result" type="number">
+    <button id="check" onclick="check()">Проверить</button>
+</div>
+</div>
+</body>
+</html>
